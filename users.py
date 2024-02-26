@@ -88,6 +88,20 @@ def user_alt_password():
             return '0'
 
 
+@app.route('/users/alt_role', methods=['POST'])
+def user_alt_role():
+    """
+
+    :return:
+    """
+    if request.method == 'POST':
+        uid = request.form.get('uid')
+        role = request.form.get('role')
+        cursor.execute(f'UPDATE users SET role="{role}" WHERE id="{uid}"')
+        db.commit()
+        return '0'
+
+
 @app.route('/users/del', methods=['POST'])
 def user_del():
     """
@@ -99,7 +113,6 @@ def user_del():
     """
     if request.method == 'POST':
         uid = request.form.get('uid')
-        print(uid)
         try:
             cursor.execute(f'DELETE FROM users WHERE id="{uid}"')
             cursor.execute(f'DELETE FROM favorite WHERE owner="{uid}"')
