@@ -1,8 +1,11 @@
-from main import *
+from dao import db, cursor
 from flask import request, jsonify
+from flask import Blueprint
+
+users = Blueprint('users', __name__)
 
 
-@app.route('/users/list', methods=['GET'])
+@users.route('/list', methods=['GET'])
 def user_list():
     """
     列举系统的所有用户
@@ -15,7 +18,7 @@ def user_list():
         return jsonify([{'id': i[0], 'username': i[1], 'role': i[2], 'create_time': i[3]} for i in data])
 
 
-@app.route('/users/register', methods=['POST'])
+@users.route('/register', methods=['POST'])
 def user_register():
     """
     注册新用户
@@ -37,7 +40,7 @@ def user_register():
         return '0'
 
 
-@app.route('/users/login', methods=['POST'])
+@users.route('/login', methods=['POST'])
 def user_login():
     """
     用户登录验证
@@ -57,7 +60,7 @@ def user_login():
             return jsonify({'id': data[0], 'username': data[1], 'role': data[2]})
 
 
-@app.route('/users/alt_password', methods=['POST'])
+@users.route('/alt_password', methods=['POST'])
 def user_alt_password():
     """
     修改密码
@@ -81,7 +84,7 @@ def user_alt_password():
             return '0'
 
 
-@app.route('/users/alt_role', methods=['POST'])
+@users.route('/alt_role', methods=['POST'])
 def user_alt_role():
     """
 
@@ -95,7 +98,7 @@ def user_alt_role():
         return '0'
 
 
-@app.route('/users/del', methods=['POST'])
+@users.route('/del', methods=['POST'])
 def user_del():
     """
     删除用户

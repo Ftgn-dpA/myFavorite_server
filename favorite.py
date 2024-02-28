@@ -1,8 +1,11 @@
-from main import *
+from dao import db, cursor
 from flask import request, jsonify
+from flask import Blueprint
+
+favorite = Blueprint('favorite', __name__)
 
 
-@app.route('/favorite/list', methods=['GET'])
+@favorite.route('/list', methods=['GET'])
 def favorite_list():
     """
     列举当前用户所有收藏网站
@@ -16,7 +19,7 @@ def favorite_list():
         return jsonify([{'fid': i[0], 'name': i[1], 'description': i[2], 'url': i[3]} for i in data])
 
 
-@app.route('/favorite/add', methods=['POST'])
+@favorite.route('/add', methods=['POST'])
 def favorite_add():
     """
     添加收藏网站
@@ -32,7 +35,7 @@ def favorite_add():
         return '0'
 
 
-@app.route('/favorite/del', methods=['POST'])
+@favorite.route('/del', methods=['POST'])
 def favorite_del():
     """
 
@@ -46,7 +49,7 @@ def favorite_del():
         return '0'
 
 
-@app.route('/favorite/update', methods=['POST'])
+@favorite.route('/update', methods=['POST'])
 def favorite_update():
     """
 
