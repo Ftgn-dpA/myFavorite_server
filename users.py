@@ -118,3 +118,16 @@ def user_del():
             db.rollback()
             print(e)
             return '1'
+
+
+@users.route('/view', methods=['GET'])
+def favorite_view():
+    """
+
+    :return:
+    """
+    if request.method == 'GET':
+        owner = request.args.get('owner')
+        cursor.execute(f'SELECT name, url, description FROM favorite WHERE owner="{owner}" AND visibility=1')
+        data = cursor.fetchall()
+        return jsonify([{'name': i[0], 'url': i[1], 'description': i[2]} for i in data])

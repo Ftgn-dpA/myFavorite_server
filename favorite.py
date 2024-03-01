@@ -8,15 +8,15 @@ favorite = Blueprint('favorite', __name__)
 @favorite.route('/list', methods=['GET'])
 def favorite_list():
     """
-    列举当前用户所有收藏网站
+    列举当前用户所有收藏网站信息
     :return:
         json键值对
     """
     if request.method == 'GET':
         owner = request.args.get('owner')
-        cursor.execute(f'SELECT fid, name, description, url FROM favorite WHERE owner="{owner}"')
+        cursor.execute(f'SELECT fid, name, url, visibility, description FROM favorite WHERE owner="{owner}"')
         data = cursor.fetchall()
-        return jsonify([{'fid': i[0], 'name': i[1], 'description': i[2], 'url': i[3]} for i in data])
+        return jsonify([{'fid': i[0], 'name': i[1], 'url': i[2], 'visibility': i[3], 'description': i[4]} for i in data])
 
 
 @favorite.route('/add', methods=['POST'])
@@ -29,8 +29,9 @@ def favorite_add():
         name = request.form.get('name')
         url = request.form.get('url')
         owner = request.form.get('owner')
+        visibility = request.form.get('visibility')
         description = request.form.get('description')
-        cursor.execute(f'INSERT INTO favorite VALUES (NULL, "{name}", "{url}", "{owner}", "{description}")')
+        cursor.execute(f'INSERT INTO favorite VALUES (NULL, "{name}", "{url}", "{owner}", "{visibility}", "{description}")')
         db.commit()
         return '0'
 
@@ -59,7 +60,8 @@ def favorite_update():
         fid = request.form.get('fid')
         new_name = request.form.get('new_name')
         new_url = request.form.get('new_url')
+        new_visibility = request.form.get('new_visibility')
         new_description = request.form.get('new_description')
-        cursor.execute(f'UPDATE favorite SET name="{new_name}", url="{new_url}", description="{new_description}" WHERE fid="{fid}"')
+        cursor.execute(f'UPDATE favorite SET name="{new_name}", url="{new_url}",visibility="{new_visibility}", description="{new_description}" WHERE fid="{fid}"')
         db.commit()
         return '0'
